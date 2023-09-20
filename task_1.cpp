@@ -1,30 +1,33 @@
 #include <iostream>
 #include <cmath> 
 
-double calculatePolygonArea(double sideLength, int numberOfSides) {
-    if (numberOfSides < 3) {
+using namespace std;
+
+float calculatePolygonArea(float side_len, int sides_number) {
+    if (sides_number < 3) {
         std::cout << "Ошибка: N-угольник должен иметь минимум 3 стороны." << std::endl;
         return 0.0;
     }
 
-    double apothem = sideLength / (2 * tan(M_PI / numberOfSides));
-    double area = (numberOfSides * sideLength * apothem) / 2;
-    return area;
+    float apothem = side_len / (2 * tan(M_PI / sides_number));
+    float square = (sides_number * side_len * apothem) / 2;
+    return square;
 }
 
 int main() {
-    double sideLength;
-    int numberOfSides;
+    setlocale(LC_ALL, "RU");
+    float side_len;
+    int sides_number;
 
-    std::cout << "Введите длину стороны (A): ";
-    std::cin >> sideLength;
+    cout << "Введите длину стороны (A): ";
+    cin >> side_len;
 
-    std::cout << "Введите количество сторон (N): ";
-    std::cin >> numberOfSides;
+    cout << "Введите количество сторон (N): ";
+    cin >> sides_number;
 
-    double polygonArea = calculatePolygonArea(sideLength, numberOfSides);
+    float polygon_square = calculatePolygonArea(side_len, sides_number);
 
-    std::cout << "Площадь N-угольника: " << polygonArea << std::endl;
+    cout << "Площадь N-угольника: " << polygon_square << endl;
 
     return 0;
 }
