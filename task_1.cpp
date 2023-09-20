@@ -1,5 +1,5 @@
 #include <iostream>
-#include <cmath> // Включаем библиотеку для математических функций
+#include <cmath> 
 
 double calculatePolygonArea(double sideLength, int numberOfSides) {
     if (numberOfSides < 3) {
