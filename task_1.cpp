@@ -3,9 +3,9 @@
 
 using namespace std;
 
-float calculatePolygonArea(float side_len, int sides_number) {
+float calculate_polygon_square(float side_len, int sides_number) {
     if (sides_number < 3) {
-        std::cout << "Ошибка: N-угольник должен иметь минимум 3 стороны." << std::endl;
+        cout << "Ошибка: N-угольник должен иметь минимум 3 стороны." << endl;
         return 0.0;
     }
 
@@ -25,7 +25,7 @@ int main() {
     cout << "Введите количество сторон (N): ";
     cin >> sides_number;
 
-    float polygon_square = calculatePolygonArea(side_len, sides_number);
+    float polygon_square = calculate_polygon_square(side_len, sides_number);
 
     cout << "Площадь N-угольника: " << polygon_square << endl;
 
