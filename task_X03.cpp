@@ -30,18 +30,22 @@ int main() {
         Item("торт", 650)
     };
 
+    sort(items.begin(), items.end(), [](const Item& a, const Item& b) {
+        return a.bonus(3) > b.bonus(3);
+    });
+
     int totalBonus = 0;
     int remainingBonus = 0;
     vector<Item> bestOrder;
-    
+
     for (const Item& item : items) {
-        int itemBonus = item.bonus(3);
-        
-        if (remainingBonus >= item.getPrice()) {
-            remainingBonus -= item.getPrice();
+        int itemPrice = item.getPrice();
+
+        if (remainingBonus >= itemPrice) {
+            remainingBonus -= itemPrice;
         } else {
-            totalBonus += itemBonus;
-            remainingBonus += itemBonus;
+            totalBonus += item.bonus(3);
+            remainingBonus = item.bonus(3) - itemPrice;
         }
 
         bestOrder.push_back(item);
@@ -58,15 +62,8 @@ int main() {
     bestOrder.clear();
 
     for (const Item& item : items) {
-        int itemBonus = item.bonus(3);
-        
-        if (remainingBonus >= item.getPrice()) {
-            remainingBonus -= item.getPrice();
-        } else {
-            totalBonus += item.getPrice();
-            remainingBonus = item.getPrice() - itemBonus;
-        }
-
+        int itemPrice = item.getPrice();
+        totalBonus += itemPrice;
         bestOrder.push_back(item);
     }
 
@@ -74,7 +71,7 @@ int main() {
     for (const Item& item : bestOrder) {
         cout << item.getName() << " - " << item.getPrice() << " рублей" << endl;
     }
-    cout << "Итого начислено бонусов: " << totalBonus << " рублей" << endl;
+    cout << "Итого начислено бонусов: " << totalBonus * 0.03 << " рублей" << endl;
 
     return 0;
 }
