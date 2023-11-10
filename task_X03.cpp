@@ -6,72 +6,90 @@ using namespace std;
 
 class Item {
 public:
-    Item(const string& name, int price) : name(name), price(price) {}
-    string getName() const { return name; }
-    int getPrice() const { return price; }
-    int bonus(int n) const { return price * n / 100; }
-
-private:
     string name;
     int price;
+
+    Item(const string& name, int price) : name(name), price(price) {}
+
+    int bonus(int n) const {
+        return price * n / 100;
+    }
 };
 
+void printVector(const vector<Item>& items) {
+    for (const auto& item : items) {
+        cout << item.name << " (" << item.price << " - RUB)\n";
+    }
+    cout << endl;
+}
+
 int main() {
-    vector<Item> items = {
-        Item("яблоки", 200),
-        Item("молоко", 120),
-        Item("конфеты", 300),
-        Item("масло", 500),
-        Item("орехи", 1000),
-        Item("колбаса", 350),
-        Item("горчица", 45),
-        Item("хлеб", 50),
-        Item("чай", 100),
-        Item("торт", 650)
-    };
+    Item apples("Яблоки", 200);
+    Item milk("Молоко", 120);
+    Item candy("Конфеты", 300);
+    Item butter("Масло", 500);
+    Item nuts("Орехи", 1000);
+    Item sausage("Колбаса", 350);
+    Item mustard("Горчица", 45);
+    Item bread("Хлеб", 50);
+    Item tea("Чай", 100);
+    Item cake("Торт", 650);
 
-    sort(items.begin(), items.end(), [](const Item& a, const Item& b) {
-        return a.bonus(3) > b.bonus(3);
-    });
+    vector<Item> items = {apples, milk, candy, butter, nuts, sausage, mustard, bread, tea, cake};
 
-    int totalBonus = 0;
-    int remainingBonus = 0;
+    cout << "All possible permutations of the vector items:\n";
+
+    int maxBonus = 0;
     vector<Item> bestOrder;
 
-    for (const Item& item : items) {
-        int itemPrice = item.getPrice();
+//     sort(items.begin(), items.end(), [](const Item& a, const Item& b) {
+//         return a.price > b.price;
+//     });
 
-        if (remainingBonus >= itemPrice) {
-            remainingBonus -= itemPrice;
-        } else {
-            totalBonus += item.bonus(3);
-            remainingBonus = item.bonus(3) - itemPrice;
+//     do {
+//         // cout << "Current permutation:\n";
+//         // printVector(items); 
+//         int totalBonus = 0;
+//         for (const auto& item : items) {
+//             totalBonus += item.bonus(3);
+//         }
+//         if (totalBonus > maxBonus) {
+//             maxBonus = totalBonus;
+//             bestOrder = items;
+//         }
+//     } while (next_permutation(items.begin(), items.end(), [](const Item& a, const Item& b) {
+//         return a.price > b.price;
+//     }));
+
+//     cout << "\nMost profitable order with full use of bonuses:\n";
+//     printVector(bestOrder);
+//     cout << "Total Bonus: " << maxBonus << " - RUB\n";
+
+//     return 0;
+// }
+    vector<int> indices(items.size());
+
+    for (int i = 0; i < items.size(); ++i) {
+        indices[i] = i;
+    }
+
+    while (next_permutation(indices.begin(), indices.end())) {
+        // printVector(items);
+        int totalBonus = 0;
+        vector<Item> currentOrder;
+        for (int i = 0; i < items.size(); ++i) {
+            totalBonus += items[indices[i]].bonus(3);
+            currentOrder.push_back(items[indices[i]]);
         }
-
-        bestOrder.push_back(item);
+        if (totalBonus > maxBonus) {
+            maxBonus = totalBonus;
+            bestOrder = currentOrder;
+        }
     }
 
-    cout << "Самый выгодный порядок покупки (с остатком бонусов):" << endl;
-    for (const Item& item : bestOrder) {
-        cout << item.getName() << " - " << item.getPrice() << " рублей" << endl;
-    }
-    cout << "Итого начислено бонусов: " << totalBonus << " рублей" << endl;
-
-    totalBonus = 0;
-    remainingBonus = 0;
-    bestOrder.clear();
-
-    for (const Item& item : items) {
-        int itemPrice = item.getPrice();
-        totalBonus += itemPrice;
-        bestOrder.push_back(item);
-    }
-
-    cout << "\nСамый выгодный порядок покупки (с полным использованием бонусов):" << endl;
-    for (const Item& item : bestOrder) {
-        cout << item.getName() << " - " << item.getPrice() << " рублей" << endl;
-    }
-    cout << "Итого начислено бонусов: " << totalBonus * 0.03 << " рублей" << endl;
+    cout << "\nMost profitable order with full use of bonuses:\n";
+    printVector(bestOrder);
+    cout << "Total Bonus: " << maxBonus << " - RUB\n";
 
     return 0;
 }
